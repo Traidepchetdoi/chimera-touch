@@ -5,7 +5,7 @@ plugins {
 android {
     namespace 'com.chimera.touch'
     compileSdk 34
-
+    // ... (Giữ nguyên phần còn lại như cũ) ...
     defaultConfig {
         applicationId "com.chimera.touch"
         minSdk 26
