@@ -1,4 +1,4 @@
-name: OMEGA CI/CD PIPELINE V2
+name: OMEGA CI/CD PIPELINE V3 (ENHANCED)
 
 on:
   push:
@@ -10,24 +10,28 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Checkout Repository
+    - name: 📥 Checkout Repository
       uses: actions/checkout@v4
       
-    - name: Set up JDK 17
+    - name: ☕ Set up JDK 17
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
         
-    # ⚡ TRIỆU HỒI GRADLE TRỰC TIẾP (BYPASS GRADLEW)
-    - name: Setup Gradle
+    - name: ⚡ Setup Gradle
       uses: gradle/actions/setup-gradle@v3
       
-    # ⚡ BIÊN DỊCH APK (DÙNG LỆNH GRADLE TRỰC TIẾP)
-    - name: Build Debug APK
-      run: gradle assembleDebug
-      
-    - name: Upload APK to Artifact v4
+    # 🛡️ ÁP DỤNG LỆNH ::group:: TỪ TÀI LIỆU
+    # Gom toàn bộ log dài dòng của Gradle vào một nhóm có tên "🏗️ Gradle Assembly"
+    - name: 🏗️ Build Debug APK
+      run: |
+        echo "::group::🏗️ Starting Gradle Assembly (Click to expand logs)..."
+        gradle assembleDebug --no-daemon
+        echo "::endgroup::"
+        echo "::notice title=Build Success::APK đã được đúc kết thành công!"
+        
+    - name: 📦 Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: chimera-omega-apk-${{ github.run_number }}
