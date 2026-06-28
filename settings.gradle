@@ -5,15 +5,12 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-
 dependencyResolutionManagement {
-    // Ép buộc Gradle chỉ được lấy thư viện từ đây, cấm tiệt việc khai báo ở build.gradle
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS) // Chặn khai báo lén ở build.gradle
     repositories {
         google()
         mavenCentral()
     }
 }
-
 rootProject.name = "ChimeraTouch"
 include ':app'
