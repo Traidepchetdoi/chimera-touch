@@ -30,3 +30,52 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'org.java-websocket:Java-WebSocket:1.5.4'
 }
+
+import com.google.mlkit.vision.face.FaceDetection
+import com.google.mlkit.vision.face.FaceDetectorOptions
+import com.google.mlkit.vision.common.InputImage
+
+// ... (Trong hàm analyze hoặc process) ...
+
+// 1. CẤU HÌNH BỘ NÃO X-QUANG (Lấy góc Euler)
+val options = FaceDetectorOptions.Builder()
+    .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST) // Ưu tiên tốc độ FPS
+    .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_NONE)       // Tắt landmark để nhẹ máy
+    .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_NONE)
+    .setContourMode(FaceDetectorOptions.CONTOUR_MODE_NONE)
+    .build()
+
+val detector = FaceDetection.getClient(options)
+val image = InputImage.fromMediaImage(imageProxy.image!!, imageProxy.imageInfo.rotationDegrees)
+
+// 2. QUÉT KHUNG XƯƠNG 3D
+detector.process(image)
+    .addOnSuccessListener { faces ->
+        for (face in faces) {
+            val boundingBox = face.boundingBox
+            
+            // Tọa độ tâm hộp 2D cũ
+            val centerX = boundingBox.exactCenterX().toFloat()
+            val centerY = boundingBox.exactCenterY().toFloat()
+            val headOffset = boundingBox.height().toFloat()
+            
+            // 🧠 CHÌA KHÓA X-QUANG: LẤY GÓC PITCH (NGẨNG/CÚI)
+            // headEulerAngleX: 
+            // - Dương (+): Địch ngẩng mặt lên trời
+            // - Âm (-): Địch cúi đầu xuống đất
+            val pitchAngle = face.headEulerAngleX 
+            
+            // 3. GỬI TÍN HIỆU VỀ TERMUX (OMEGA PROTOCOL)
+            // Định dạng JSON mới có thêm trường "pitch"
+            val payload = String.format(
+                "{\"TARGET\":true, \"x\":%.2f, \"y\":%.2f, \"headOffset\":%.2f, \"pitch\":%.2f}",
+                centerX, centerY, headOffset, pitchAngle
+            )
+            
+            // Gửi qua WebSocket (đảm biến webSocketClient đã được khởi tạo)
+            webSocketClient?.send(payload) 
+        }
+    }
+    .addOnCompleteListener {
+        imageProxy.close() // Giải phóng bộ nhớ Camera
+    }
