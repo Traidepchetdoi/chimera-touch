@@ -4,14 +4,14 @@ plugins {
 
 android {
     namespace 'com.chimera.touch'
-    compileSdk 34
-    // ... (Giữ nguyên phần còn lại như cũ) ...
+    compileSdk 34 // Dùng API 34 để biên dịch (Tương thích AGP 8.1.4)
+
     defaultConfig {
         applicationId "com.chimera.touch"
-        minSdk 26
-        targetSdk 34
+        minSdk 26       // Hỗ trợ từ Android 8.0
+        targetSdk 34    // 🛡️ NGỤY TRANG: Lách luật giám sát ngầm của Android 15/16
         versionCode 1
-        versionName "1.0"
+        versionName "OMEGA-XRAY-1.0"
     }
 
     buildTypes {
@@ -31,20 +31,6 @@ android {
     
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/INDEX.LIST'
     }
-}
-
-dependencies {
-    // AndroidX Core
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.9.0'
-    
-    // ML Kit Face Detection - VERSION ỔN ĐỊNH
-    implementation 'com.google.mlkit:face-detection:16.1.5'
-    
-    // WebSocket
-    implementation 'org.java-websocket:Java-WebSocket:1.5.3'
-    
-    // Optional: Play Services (nếu cần)
-    implementation 'com.google.android.gms:play-services-vision:20.1.3'
 }
