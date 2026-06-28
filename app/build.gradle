@@ -27,9 +27,7 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'org.java-websocket:Java-WebSocket:1.5.4'
+    // ... các dòng cũ ...
+    implementation 'com.google.mlkit:face-detection:16.1.6' // 🧠 Não bộ X-Quang
+    implementation 'org.java-websocket:Java-WebSocket:1.5.3' // 🕸️ Mạng nhện WebSocket
 }
-
-// 🧠 TIÊM BỘ NÃO ML KIT FACE DETECTION (Lấy góc Pitch 3D)
-implementation 'com.google.mlkit:face-detection:16.1.6'
